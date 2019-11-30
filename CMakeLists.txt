@@ -36,3 +36,13 @@ add_executable(tutorial01_first_window
 target_link_libraries(tutorial01_first_window
 	${ALL_LIBS}
 )
+
+# Tutorial 2
+add_executable(tutorial02_red_triangle
+        tutorial02_red_triangle/tutorial02.cpp
+        common/shader.cpp
+        common/shader.hpp
+)
+target_link_libraries(tutorial02_red_triangle
+        ${ALL_LIBS}
+)
