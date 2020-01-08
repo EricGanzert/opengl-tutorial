@@ -46,3 +46,14 @@ add_executable(tutorial02_red_triangle
 target_link_libraries(tutorial02_red_triangle
         ${ALL_LIBS}
 )
+
+# Tutorial 3
+add_executable(tutorial03_matrices 
+    tutorial03_matrices/tutorial03.cpp
+	common/shader.cpp
+	common/shader.hpp
+)
+
+target_link_libraries(tutorial03_matrices
+	${ALL_LIBS}
+)
