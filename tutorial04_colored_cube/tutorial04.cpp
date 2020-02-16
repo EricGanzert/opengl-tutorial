@@ -75,7 +75,7 @@ int main ()
 
     // Camera matrix
     glm::mat4 View = glm::lookAt(
-        glm::vec3(4,3,-3), // Camera is here in world space
+        glm::vec3(4,3,-5), // Camera is here in world space
         glm::vec3(0,0,0), // and looks at the origin
         glm::vec3(0,1,0) // Head is up
     );
@@ -176,12 +176,83 @@ int main ()
     glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_color_buffer_data), g_color_buffer_data, GL_STATIC_DRAW);
 
+    // Exercise 1: draw the triangle in addition to the cube
+
+    GLuint TriangleVertexArrayID;
+    glGenVertexArrays(1, &TriangleVertexArrayID);
+    glBindVertexArray(TriangleVertexArrayID);
+
+    // Model matrix : an identity matrix (model will be at the origin)
+    glm::mat4 TriangleModel = glm::translate(glm::mat4(), glm::vec3(2.0f, 2.0f, 0.0f));
+    // Our ModelViewProjection : multiplication of our 3 matrices
+    glm::mat4 TriangleMVP = Projection * View * TriangleModel;
+
+    static const GLfloat g_triangle_vertex_buffer_data[] = {
+        -1.0f, -1.0f, 0.0f,
+        1.0f, -1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f,
+    };
+
+    static const GLfloat g_triangle_color_buffer_data[] = {
+        1.0f, 0.0f, 0.0f,
+        0.8f, 0.2f, 0.0f,
+        0.6f, 0.4f, 0.0f,
+    };
+
+    GLuint triangleVertexbuffer;
+    glGenBuffers(1, &triangleVertexbuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, triangleVertexbuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_triangle_vertex_buffer_data),
+        g_triangle_vertex_buffer_data, GL_STATIC_DRAW);
+
+    GLuint triangleColorBuffer;
+    glGenBuffers(1, &triangleColorBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, triangleColorBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(g_triangle_color_buffer_data),
+        g_triangle_color_buffer_data, GL_STATIC_DRAW);
+
     do {
         // Clear the screen
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Use our shader
         glUseProgram(programID);
+
+        // Send our transformation to the currently bound shader,
+        // in the "MVP" uniform
+        glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &TriangleMVP[0][0]);
+
+        // 1st attribute buffer : vertices
+        glEnableVertexAttribArray(0);
+        glBindBuffer(GL_ARRAY_BUFFER, triangleVertexbuffer);
+        glVertexAttribPointer(
+            0,
+            3,
+            GL_FLOAT,
+            GL_FALSE,
+            0,
+            (void*)0
+        );
+
+        // 2nd attribute buffer : colors
+        glEnableVertexAttribArray(1);
+        glBindBuffer(GL_ARRAY_BUFFER, triangleColorBuffer);
+        glVertexAttribPointer(
+            1,
+            3,
+            GL_FLOAT,
+            GL_FALSE,
+            0,
+            (void*)0
+        );
+
+        // Draw the triangle
+        glDrawArrays(GL_TRIANGLES, 0, 3);
+
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+
+        // -------------- CUBE --------------------
 
         // Send our transformation to the currently bound shader,
         // in the "MVP" uniform
