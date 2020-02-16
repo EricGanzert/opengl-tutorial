@@ -57,3 +57,14 @@ add_executable(tutorial03_matrices
 target_link_libraries(tutorial03_matrices
 	${ALL_LIBS}
 )
+
+# Tutorial 4
+add_executable(tutorial04_colored_cube
+    tutorial04_colored_cube/tutorial04.cpp
+    common/shader.cpp
+    common/shader.hpp
+)
+
+target_link_libraries(tutorial04_colored_cube
+    ${ALL_LIBS}
+)
