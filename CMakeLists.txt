@@ -68,3 +68,19 @@ add_executable(tutorial04_colored_cube
 target_link_libraries(tutorial04_colored_cube
     ${ALL_LIBS}
 )
+
+# Tutorial 5
+add_executable(tutorial05_textured_cube
+    tutorial05_textured_cube/tutorial05.cpp
+    common/shader.cpp
+    common/shader.hpp
+    common/texture.cpp
+    common/texture.hpp
+
+    # tutorial05_textured_cube/TransformVertexShader.vertexshader
+    # tutorial05_textured_cube/TransformFragmentShader.fragmentshader
+)
+
+target_link_libraries(tutorial05_textured_cube
+    ${ALL_LIBS}
+)
